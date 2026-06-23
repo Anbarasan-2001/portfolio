@@ -1,0 +1,67 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block page_heading %}Dashboard{% endblock %}
+
+{% block content %}
+{# Stat cards #}
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    {% include "dashboard/_stat_card.html" with label="Projects" value=stats.projects sub=stats.published_projects|stringformat:"s"|add:" published" %}
+    {% include "dashboard/_stat_card.html" with label="Blog posts" value=stats.posts %}
+    {% include "dashboard/_stat_card.html" with label="Messages" value=stats.messages sub=stats.unread|stringformat:"s"|add:" unread" %}
+    {% include "dashboard/_stat_card.html" with label="Testimonials" value=stats.testimonials %}
+    {% include "dashboard/_stat_card.html" with label="Skills" value=stats.skills %}
+    {% include "dashboard/_stat_card.html" with label="Experience" value=stats.experiences %}
+</div>
+
+<div class="grid lg:grid-cols-2 gap-6 mt-8">
+    {# Recent messages #}
+    <section class="rounded-2xl bg-white dark:bg-[#0e1428] border border-slate-200 dark:border-white/10 p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="font-semibold text-slate-900 dark:text-white">Recent messages</h2>
+            <a href="{% url 'dashboard:messages' %}" class="text-sm text-accent">View all</a>
+        </div>
+        {% if recent_messages %}
+        <ul class="divide-y divide-slate-100 dark:divide-white/5">
+            {% for m in recent_messages %}
+            <li class="py-3 flex items-start justify-between gap-3">
+                <div class="min-w-0">
+                    <p class="font-medium text-slate-800 dark:text-slate-100 truncate">
+                        {{ m.name }}
+                        {% if not m.is_read %}<span class="ml-1 inline-block w-2 h-2 rounded-full bg-accent align-middle"></span>{% endif %}
+                    </p>
+                    <p class="text-sm text-slate-500 truncate">{{ m.subject|default:"(no subject)" }}</p>
+                </div>
+                <span class="text-xs text-slate-400 whitespace-nowrap">{{ m.created_at|date:"M j" }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="text-sm text-slate-400">No messages yet.</p>
+        {% endif %}
+    </section>
+
+    {# Recent projects #}
+    <section class="rounded-2xl bg-white dark:bg-[#0e1428] border border-slate-200 dark:border-white/10 p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="font-semibold text-slate-900 dark:text-white">Recent projects</h2>
+            <a href="{% url 'dashboard:project_list' %}" class="text-sm text-accent">Manage</a>
+        </div>
+        {% if recent_projects %}
+        <ul class="divide-y divide-slate-100 dark:divide-white/5">
+            {% for p in recent_projects %}
+            <li class="py-3 flex items-center justify-between gap-3">
+                <a href="{% url 'dashboard:project_edit' p.pk %}"
+                   class="font-medium text-slate-800 dark:text-slate-100 hover:text-accent truncate">{{ p.title }}</a>
+                <span class="text-xs px-2 py-0.5 rounded-full
+                             {% if p.status == 'published' %}bg-emerald-500/15 text-emerald-500{% else %}bg-slate-500/15 text-slate-400{% endif %}">
+                    {{ p.get_status_display }}
+                </span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="text-sm text-slate-400">No projects yet.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Blog · {{ site.hero_title }}{% endblock %}
+
+{% block content %}
+<section data-scroll-section class="pt-32 pb-24 sm:pb-32">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+        <div class="text-center mb-14">
+            <h1 data-anim="fade-up" class="font-display text-4xl sm:text-5xl font-bold
+                       text-slate-900 dark:text-white">Blog</h1>
+            <p data-anim="fade-up" data-anim-delay="0.1" class="mt-4 text-slate-500 dark:text-slate-400">
+                Writing on development, design and motion.
+            </p>
+        </div>
+
+        {% if posts %}
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" data-stagger>
+            {% for post in posts %}
+                {% include "blog/_card.html" with post=post %}
+            {% endfor %}
+        </div>
+
+        {# Pagination #}
+        {% if is_paginated %}
+        <nav class="flex justify-center items-center gap-2 mt-12 text-sm">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}"
+               class="px-4 py-2 rounded-lg border border-slate-200 dark:border-white/10
+                      hover:border-accent hover:text-accent">Previous</a>
+            {% endif %}
+            <span class="px-4 py-2 text-slate-500">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}"
+               class="px-4 py-2 rounded-lg border border-slate-200 dark:border-white/10
+                      hover:border-accent hover:text-accent">Next</a>
+            {% endif %}
+        </nav>
+        {% endif %}
+        {% else %}
+        <p class="text-center text-slate-400">No posts yet.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

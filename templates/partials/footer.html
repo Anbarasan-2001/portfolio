@@ -1,0 +1,32 @@
+{# Site footer — inside the Locomotive container so it scrolls normally. #}
+<footer class="bg-slate-50 dark:bg-[#070a16] border-t border-slate-100 dark:border-white/10"
+        data-scroll-section>
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-12">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+
+            <a href="{% url 'core:home' %}#home" data-nav
+               class="font-display text-lg font-bold text-slate-900 dark:text-white">
+                {{ site.hero_title|default:"Portfolio"|truncatewords:2 }}<span class="text-accent">.</span>
+            </a>
+
+            {# Social links #}
+            {% if site.social_links %}
+            <div class="flex items-center gap-4">
+                {% for label, url, icon in site.social_links %}
+                <a href="{{ url }}" target="_blank" rel="noopener noreferrer"
+                   aria-label="{{ label }}"
+                   class="text-slate-500 hover:text-accent transition-transform
+                          hover:-translate-y-1 duration-300 text-sm font-medium">
+                    {{ label }}
+                </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <p class="text-xs text-slate-500 dark:text-slate-400">
+                &copy; <span id="year"></span>
+                {{ site.hero_title|default:"Portfolio"|truncatewords:2 }}. All rights reserved.
+            </p>
+        </div>
+    </div>
+</footer>

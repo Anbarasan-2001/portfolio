@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% comment %}Homepage — assembles every public section in order.{% endcomment %}
+
+{% block content %}
+    {% include "core/sections/hero.html" %}
+    {% include "core/sections/about.html" %}
+    {% include "core/sections/skills.html" %}
+    {% include "core/sections/projects.html" %}
+    {% include "core/sections/experience.html" %}
+    <!-- {% include "core/sections/testimonials.html" %} -->
+    <!-- {% include "core/sections/blog.html" %} -->
+    {% include "core/sections/contact.html" %}
+{% endblock %}

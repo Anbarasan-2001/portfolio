@@ -1,0 +1,14 @@
+{# Reusable section heading. Params: heading, sub (optional). #}
+<div class="max-w-2xl mx-auto text-center mb-14">
+    <h2 data-anim="fade-up"
+        class="font-display text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
+        {{ heading }}
+    </h2>
+    <span data-anim="fade-up" data-anim-delay="0.1"
+          class="block mx-auto mt-3 h-1 w-16 rounded-full bg-gradient-to-r from-accent to-accent-2"></span>
+    {% if sub %}
+    <p data-anim="fade-up" data-anim-delay="0.15" class="mt-4 text-slate-500 dark:text-slate-400">
+        {{ sub }}
+    </p>
+    {% endif %}
+</div>

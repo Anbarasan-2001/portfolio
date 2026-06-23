@@ -1,0 +1,40 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Site settings{% endblock %}
+{% block page_heading %}Site settings{% endblock %}
+{% block extra_head %}{{ form.media }}{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data" class="w-full space-y-6">
+    {% csrf_token %}
+    <p class="text-sm text-slate-500">
+        Everything here is editable without touching code — hero text, about,
+        contact details, social links, resume, profile photo and SEO defaults.
+    </p>
+
+    {% if form.non_field_errors %}
+    <div class="rounded-lg bg-red-500/15 border border-red-500/30 text-red-500 text-sm px-4 py-3">
+        {{ form.non_field_errors }}
+    </div>
+    {% endif %}
+
+    <div class="rounded-2xl bg-white dark:bg-[#0e1428] border border-slate-200 dark:border-white/10 p-6
+                grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {% for field in form.visible_fields %}
+        <div class="{% if field.field.widget.input_type == 'textarea' or field.name == 'about_text' or field.name == 'meta_description' %}sm:col-span-2 lg:col-span-3{% endif %}">
+            <label for="{{ field.id_for_label }}"
+                   class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
+                {{ field.label }}
+            </label>
+            {{ field }}
+            {% if field.help_text %}<p class="mt-1 text-xs text-slate-400">{{ field.help_text|safe }}</p>{% endif %}
+            {% for error in field.errors %}<p class="mt-1 text-xs text-red-500">{{ error }}</p>{% endfor %}
+        </div>
+        {% endfor %}
+        {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+    </div>
+
+    <button type="submit" class="px-6 py-2.5 rounded-lg bg-accent text-white font-medium hover:bg-accent/90">
+        Save settings
+    </button>
+</form>
+{% endblock %}

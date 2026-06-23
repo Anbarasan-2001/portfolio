@@ -1,0 +1,38 @@
+{# ===== Skills / Tech stack ===== #}
+<section id="skills" data-scroll-section
+         class="py-24 sm:py-32 bg-white/50 dark:bg-white/[0.02] backdrop-blur-sm
+                border-y border-slate-200/60 dark:border-white/5">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+        {% include "core/partials/section_heading.html" with heading="Skills & Tech Stack" sub="Tools and technologies I work with every day." %}
+
+        {% if skills_by_category %}
+        <div class="grid md:grid-cols-2 gap-x-12 gap-y-10">
+            {% for category, items in skills_by_category.items %}
+            <div data-anim="fade-up">
+                <h3 class="font-display text-lg font-semibold text-slate-800 dark:text-slate-100 mb-5">
+                    {{ category }}
+                </h3>
+                <div class="space-y-5">
+                    {% for skill in items %}
+                    <div data-skill data-percent="{{ skill.proficiency_percent }}">
+                        <div class="flex justify-between mb-1.5 text-sm">
+                            <span class="font-medium text-slate-700 dark:text-slate-200">
+                                {% if skill.icon %}<i class="{{ skill.icon }} mr-1"></i>{% endif %}{{ skill.name }}
+                            </span>
+                            <span data-skill-count class="text-slate-400">0%</span>
+                        </div>
+                        <div class="h-2.5 rounded-full bg-slate-200 dark:bg-white/10 overflow-hidden">
+                            <span class="skill-bar__fill block h-full rounded-full
+                                         bg-gradient-to-r from-accent to-accent-2"></span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-center text-slate-400">Add skills from the dashboard to populate this section.</p>
+        {% endif %}
+    </div>
+</section>

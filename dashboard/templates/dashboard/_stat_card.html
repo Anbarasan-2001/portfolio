@@ -1,0 +1,6 @@
+{# Stat card. Params: label, value, sub (optional) #}
+<div class="rounded-2xl bg-white dark:bg-[#0e1428] border border-slate-200 dark:border-white/10 p-5">
+    <p class="text-sm text-slate-500">{{ label }}</p>
+    <p class="mt-1 text-3xl font-bold text-slate-900 dark:text-white">{{ value }}</p>
+    {% if sub %}<p class="mt-1 text-xs text-slate-400">{{ sub }}</p>{% endif %}
+</div>

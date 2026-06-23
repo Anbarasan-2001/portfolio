@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Dashboard{% endblock %} · Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: {
+                colors: { accent: { DEFAULT: '#6366f1', 2: '#ec4899' } },
+                fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+            } },
+        };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="font-sans bg-slate-100 dark:bg-[#0b1020] text-slate-800 dark:text-slate-200 min-h-screen">
+
+{% with path=request.path %}
+<div class="flex min-h-screen">
+
+    {# ============================== Sidebar ============================== #}
+    <aside id="sidebar"
+           class="fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white dark:bg-[#0e1428]
+                  border-r border-slate-200 dark:border-white/10 -translate-x-full
+                  lg:translate-x-0 transition-transform duration-300 flex flex-col">
+        <div class="h-16 flex items-center px-6 border-b border-slate-200 dark:border-white/10">
+            <span class="font-bold text-lg text-slate-900 dark:text-white">
+                Portfolio<span class="text-accent">.</span>admin
+            </span>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1 text-sm">
+            {% include "dashboard/_nav_link.html" with url="dashboard:home" label="Dashboard" match="/dashboard/" exact=True %}
+            <p class="px-3 pt-4 pb-1 text-xs uppercase tracking-wide text-slate-400">Content</p>
+            {% include "dashboard/_nav_link.html" with url="dashboard:project_list" label="Projects" match="/dashboard/projects/" %}
+            {% include "dashboard/_nav_link.html" with url="dashboard:category_list" label="Categories" match="/dashboard/categories/" %}
+            {% include "dashboard/_nav_link.html" with url="dashboard:technology_list" label="Technologies" match="/dashboard/technologies/" %}
+            {% include "dashboard/_nav_link.html" with url="dashboard:experience_list" label="Experience" match="/dashboard/experience/" %}
+            {% include "dashboard/_nav_link.html" with url="dashboard:skill_list" label="Skills" match="/dashboard/skills/" %}
+            {% include "dashboard/_nav_link.html" with url="dashboard:blog_list" label="Blog posts" match="/dashboard/blog/" %}
+            {% include "dashboard/_nav_link.html" with url="dashboard:testimonial_list" label="Testimonials" match="/dashboard/testimonials/" %}
+            <p class="px-3 pt-4 pb-1 text-xs uppercase tracking-wide text-slate-400">Inbox</p>
+            {% include "dashboard/_nav_link.html" with url="dashboard:messages" label="Messages" match="/dashboard/messages/" badge=unread_count %}
+            <p class="px-3 pt-4 pb-1 text-xs uppercase tracking-wide text-slate-400">Site</p>
+            {% include "dashboard/_nav_link.html" with url="dashboard:settings" label="Settings" match="/dashboard/settings/" %}
+        </nav>
+
+        <div class="p-3 border-t border-slate-200 dark:border-white/10">
+            <a href="{% url 'core:home' %}" target="_blank"
+               class="block px-3 py-2 rounded-lg text-sm text-slate-500 hover:text-accent">
+                ↗ View website
+            </a>
+        </div>
+    </aside>
+
+    {# Mobile overlay #}
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+
+    {# ============================== Main ================================ #}
+    <div class="flex-1 flex flex-col min-w-0">
+        {# Topbar #}
+        <header class="h-16 flex items-center justify-between px-5 sm:px-8 bg-white dark:bg-[#0e1428]
+                       border-b border-slate-200 dark:border-white/10 sticky top-0 z-20">
+            <div class="flex items-center gap-3">
+                <button id="sidebar-toggle" class="lg:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10"
+                        aria-label="Toggle sidebar">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/>
+                    </svg>
+                </button>
+                <h1 class="font-semibold text-slate-900 dark:text-white">{% block page_heading %}{% endblock %}</h1>
+            </div>
+            <div class="flex items-center gap-4 text-sm">
+                <span class="text-slate-500 hidden sm:block">{{ request.user.get_username }}</span>
+                <form method="post" action="{% url 'accounts:logout' %}">
+                    {% csrf_token %}
+                    <button class="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-white/10
+                                   hover:bg-slate-200 dark:hover:bg-white/20 font-medium">Logout</button>
+                </form>
+            </div>
+        </header>
+
+        {# Flash messages #}
+        {% if messages %}
+        <div class="px-5 sm:px-8 pt-5 space-y-2">
+            {% for message in messages %}
+            <div class="rounded-lg px-4 py-3 text-sm
+                        {% if message.tags == 'success' %}bg-emerald-500/15 text-emerald-500 border border-emerald-500/30
+                        {% elif message.tags == 'error' %}bg-red-500/15 text-red-500 border border-red-500/30
+                        {% else %}bg-slate-500/15 text-slate-400 border border-slate-500/30{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <main class="flex-1 p-5 sm:p-8">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</div>
+{% endwith %}
+
+<script>
+    // Mobile sidebar toggle
+    (function () {
+        var btn = document.getElementById('sidebar-toggle');
+        var sidebar = document.getElementById('sidebar');
+        var overlay = document.getElementById('sidebar-overlay');
+        function open() { sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('hidden'); }
+        function close() { sidebar.classList.add('-translate-x-full'); overlay.classList.add('hidden'); }
+        if (btn) btn.addEventListener('click', open);
+        if (overlay) overlay.addEventListener('click', close);
+    })();
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

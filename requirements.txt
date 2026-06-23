@@ -1,0 +1,27 @@
+# Core
+Django==5.0.6
+djangorestframework==3.15.1
+
+# Config / env
+django-environ==0.11.2
+
+# Database
+psycopg2-binary==2.9.9          # PostgreSQL driver (SQLite needs nothing extra)
+dj-database-url==2.1.0          # parse DATABASE_URL
+
+# Images / media
+Pillow==10.3.0
+django-cleanup==8.1.0           # auto-delete orphaned media files
+
+# Forms
+django-crispy-forms==2.1
+crispy-tailwind==1.0.3
+
+# Rich text editor (blog content) — CKEditor 5 (modern, maintained)
+django-ckeditor-5==0.2.13
+
+# Static files in production
+whitenoise==6.6.0
+
+# WSGI server for deployment
+gunicorn==22.0.0

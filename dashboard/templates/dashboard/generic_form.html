@@ -1,0 +1,124 @@
+{% extends "dashboard_base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_heading %}{{ page_title }}{% endblock %}
+{% block extra_head %}
+{{ form.media }}
+<style>
+    /* Technologies / multi-checkbox rendered as a wrapping tag grid. */
+    .checkbox-grid > div { display: flex; flex-wrap: wrap; gap: .5rem; max-height: 13rem; overflow: auto; }
+    .checkbox-grid > div > div { margin: 0; }
+    .checkbox-grid label {
+        display: inline-flex; align-items: center; gap: .45rem;
+        padding: .4rem .75rem; border-radius: .6rem; cursor: pointer;
+        font-size: .85rem; line-height: 1;
+        border: 1px solid rgba(148,163,184,.25);
+        color: rgb(203,213,225);
+        transition: all .15s ease;
+    }
+    .checkbox-grid label:hover { border-color: #6366f1; color: #fff; }
+    .checkbox-grid input { accent-color: #6366f1; }
+</style>
+{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data" class="w-full pb-28">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+    <div class="rounded-lg bg-red-500/15 border border-red-500/30 text-red-500 text-sm px-4 py-3 mb-5">
+        {{ form.non_field_errors }}
+    </div>
+    {% endif %}
+
+    {# Main fields — responsive 2-column grid (wide fields span both columns). #}
+    <div class="rounded-2xl bg-white dark:bg-[#0e1428] border border-slate-200 dark:border-white/10 p-6">
+        <div class="grid sm:grid-cols-2 gap-x-6 gap-y-5">
+            {% for field in form.visible_fields %}
+            <div class="{% if field.name in form.wide_field_names %}sm:col-span-2{% endif %}">
+                <label for="{{ field.id_for_label }}"
+                       class="flex items-center gap-1.5 text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
+                    {{ field.label }}
+                    {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+                </label>
+
+                {# Current image preview (for file/image fields). #}
+                {% if field.name in form.image_field_names and field.value %}
+                <div class="mb-2">
+                    <img src="{{ field.value.url }}" alt="current {{ field.label }}"
+                         class="h-32 w-auto max-w-full rounded-lg border border-slate-200 dark:border-white/10 object-cover">
+                </div>
+                {% endif %}
+
+                {# Field widget (checkbox groups get the tag-grid wrapper). #}
+                {% if field.name in form.checkbox_group_field_names %}
+                <div class="checkbox-grid rounded-lg border border-slate-200 dark:border-white/10 p-3">{{ field }}</div>
+                {% else %}
+                {{ field }}
+                {% endif %}
+
+                {% if field.help_text %}<p class="mt-1 text-xs text-slate-400">{{ field.help_text|safe }}</p>{% endif %}
+                {% for error in field.errors %}<p class="mt-1 text-xs text-red-500">{{ error }}</p>{% endfor %}
+            </div>
+            {% endfor %}
+            {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+        </div>
+    </div>
+
+    {% comment %}
+    Existing gallery / sub images — manage (edit caption/order, delete).
+    New images are added via the "Sub images" field above.
+    {% endcomment %}
+    {% if formset %}
+    <div class="rounded-2xl bg-white dark:bg-[#0e1428] border border-slate-200 dark:border-white/10 p-6 mt-6">
+        <h3 class="font-semibold text-slate-900 dark:text-white mb-1">Current gallery images</h3>
+        <p class="text-xs text-slate-400 mb-4">
+            These are the sub images shown on the project page. Upload more with
+            “Sub images” above. Edit a caption/order or tick “Remove” to delete.
+        </p>
+        {{ formset.management_form }}
+        {% if formset.forms %}
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for f in formset %}
+            <div class="rounded-xl border border-slate-200 dark:border-white/10 p-3">
+                {% for hidden in f.hidden_fields %}{{ hidden }}{% endfor %}
+                {% if f.instance.pk and f.instance.image %}
+                <img src="{{ f.instance.image.url }}" alt=""
+                     class="w-full h-36 rounded-lg border border-slate-200 dark:border-white/10 object-cover mb-3">
+                {% endif %}
+                <label class="block text-xs text-slate-400 mb-1">Caption</label>
+                {{ f.caption }}
+                <div class="flex items-end gap-3 mt-2">
+                    <div class="w-24">
+                        <label class="block text-xs text-slate-400 mb-1">Order</label>
+                        {{ f.order }}
+                    </div>
+                    {% if f.instance.pk %}
+                    <label class="flex items-center gap-1.5 text-xs text-red-500 pb-2 ml-auto cursor-pointer">
+                        {{ f.DELETE }} Remove
+                    </label>
+                    {% endif %}
+                </div>
+                {% for e in f.image.errors %}<p class="text-xs text-red-500 mt-1">{{ e }}</p>{% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-sm text-slate-400">No gallery images yet — add some using “Sub images” above.</p>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {# Sticky action bar #}
+    <div class="fixed bottom-0 inset-x-0 lg:left-64 bg-white/90 dark:bg-[#0e1428]/90 backdrop-blur-md
+                border-t border-slate-200 dark:border-white/10 px-5 sm:px-8 py-4 z-30">
+        <div class="flex items-center gap-3">
+            <button type="submit" class="px-6 py-2.5 rounded-lg bg-accent text-white font-medium hover:bg-accent/90">
+                Save
+            </button>
+            <a href="javascript:history.back()"
+               class="px-6 py-2.5 rounded-lg border border-slate-200 dark:border-white/10
+                      text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5">Cancel</a>
+        </div>
+    </div>
+</form>
+{% endblock %}

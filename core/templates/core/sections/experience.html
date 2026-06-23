@@ -1,0 +1,57 @@
+{# ===== Experience timeline ===== #}
+<section id="experience" data-scroll-section
+         class="py-24 sm:py-32 bg-white/50 dark:bg-white/[0.02] backdrop-blur-sm
+                border-y border-slate-200/60 dark:border-white/5">
+    <div class="max-w-4xl mx-auto px-5 sm:px-8">
+        {% include "core/partials/section_heading.html" with heading="Experience & Education" sub="My professional journey so far." %}
+
+        {% if experiences %}
+        <div class="relative pl-8 sm:pl-0">
+            {# Center line (desktop) / left line (mobile) #}
+            <div class="absolute top-0 bottom-0 left-2 sm:left-1/2 sm:-translate-x-1/2 w-px
+                        bg-slate-200 dark:bg-white/10"></div>
+            <div data-timeline-line
+                 class="timeline__line-progress absolute top-0 bottom-0 left-2 sm:left-1/2
+                        sm:-translate-x-1/2 w-px bg-gradient-to-b from-accent to-accent-2"></div>
+
+            <div class="space-y-12">
+                {% for exp in experiences %}
+                <div data-timeline-item class="relative sm:grid sm:grid-cols-2 sm:gap-8
+                            {% if forloop.counter0|divisibleby:2 %}sm:text-right{% endif %}">
+                    {# Node #}
+                    <span class="absolute left-2 sm:left-1/2 -translate-x-1/2 top-1.5 w-4 h-4 rounded-full
+                                 bg-accent ring-4 ring-white dark:ring-[#0b1020] z-10"></span>
+
+                    {# Card — alternate sides on desktop #}
+                    <div class="{% if forloop.counter0|divisibleby:2 %}sm:col-start-1{% else %}sm:col-start-2{% endif %}
+                                ml-8 sm:ml-0 rounded-2xl bg-white dark:bg-white/5 border
+                                border-slate-100 dark:border-white/10 p-6 shadow-sm">
+                        <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full
+                                     {% if exp.type == 'education' %}bg-accent-2/10 text-accent-2{% else %}bg-accent/10 text-accent{% endif %}">
+                            {{ exp.get_type_display }}
+                        </span>
+                        <h3 class="mt-3 font-display text-lg font-semibold text-slate-900 dark:text-white">
+                            {{ exp.title }}
+                        </h3>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">
+                            {{ exp.organization }}{% if exp.location %} · {{ exp.location }}{% endif %}
+                        </p>
+                        <p class="mt-1 text-xs text-slate-400">
+                            {{ exp.start_date|date:"M Y" }} –
+                            {% if exp.end_date %}{{ exp.end_date|date:"M Y" }}{% else %}Present{% endif %}
+                        </p>
+                        {% if exp.description %}
+                        <p class="mt-3 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                            {{ exp.description }}
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <p class="text-center text-slate-400">Add experience entries from the dashboard.</p>
+        {% endif %}
+    </div>
+</section>
