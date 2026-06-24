@@ -100,6 +100,80 @@ html.has-scroll-smooth body { overflow: hidden; }
   to   { background-position: 10% 10%, 90% 10%, 40% 90%; }
 }
 
+/* The cosmic backdrop (.space-bg / stars / shooting stars) lives in space.css,
+   shared with the dashboard. This file only adds public-site-specific touches. */
+
+/* ---------------------------------------------- Section separators (over starfield) */
+/* A subtle glowing seam at every section boundary so each band reads distinctly. */
+main > section { position: relative; }
+main > section + section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(92%, 72rem);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(99, 102, 241, 0.45),
+    rgba(34, 211, 238, 0.35),
+    transparent
+  );
+  box-shadow: 0 0 18px 1px rgba(99, 102, 241, 0.25);
+  pointer-events: none;
+}
+
+/* ------------------------------------------------- Contact section bg (grid + glows) */
+.contact-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+/* Faint graph-paper grid that pans slowly and fades toward the edges. */
+.contact-bg__grid {
+  position: absolute;
+  inset: -2px;
+  background-image:
+    linear-gradient(to right, rgba(99, 102, 241, 0.13) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(99, 102, 241, 0.13) 1px, transparent 1px);
+  background-size: 46px 46px;
+  -webkit-mask-image: radial-gradient(ellipse 72% 62% at 50% 50%, #000 28%, transparent 78%);
+          mask-image: radial-gradient(ellipse 72% 62% at 50% 50%, #000 28%, transparent 78%);
+  animation: gridpan 32s linear infinite;
+}
+@keyframes gridpan {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 46px 46px, 46px 46px; }
+}
+/* Two soft accent glows that slowly float for depth. */
+.contact-bg__glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  opacity: 0.5;
+}
+.contact-bg__glow--1 {
+  width: 26rem; height: 26rem; top: -6rem; left: -6rem;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.5), transparent 70%);
+  animation: floatGlow 16s ease-in-out infinite alternate;
+}
+.contact-bg__glow--2 {
+  width: 22rem; height: 22rem; bottom: -8rem; right: -5rem;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.45), transparent 70%);
+  animation: floatGlow 21s ease-in-out infinite alternate-reverse;
+}
+@keyframes floatGlow {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(44px, -32px) scale(1.18); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact-bg__grid,
+  .contact-bg__glow { animation: none; }
+}
+
 /* ------------------------------------------------------------------ Skill bars */
 .skill-bar__fill {
   width: 0%;

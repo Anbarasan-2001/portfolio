@@ -6,7 +6,7 @@
 
             <a href="{% url 'website:home' %}#home" data-nav
                class="font-display text-lg font-bold text-slate-900 dark:text-white">
-                {{ site.hero_title|default:"Portfolio"|truncatewords:2 }}<span class="text-accent">.</span>
+                {{ site.brand_name|default:site.hero_title|default:"Portfolio"|truncatewords:2 }}<span class="text-accent">.</span>
             </a>
 
             {# Social links #}
@@ -25,7 +25,7 @@
 
             <p class="text-xs text-slate-500 dark:text-slate-400">
                 &copy; <span id="year"></span>
-                {{ site.hero_title|default:"Portfolio"|truncatewords:2 }}. All rights reserved.
+                {{ site.brand_name|default:site.hero_title|default:"Portfolio"|truncatewords:2 }}. All rights reserved.
             </p>
         </div>
     </div>

@@ -40,6 +40,13 @@ class SiteSettings(models.Model):
     templates can rely on ``site`` always existing.
     """
 
+    # Branding
+    brand_name = models.CharField(
+        max_length=60, blank=True,
+        help_text="Short name shown as the logo in the navbar and footer "
+                  "(e.g. your name). Falls back to the hero title if left blank.",
+    )
+
     # Hero
     hero_title = models.CharField(
         max_length=120, default="Hi, I'm Your Name",

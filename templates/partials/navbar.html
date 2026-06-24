@@ -14,7 +14,7 @@ scroll.js adds a stronger background on scroll and highlights the active link.
             <a href="{% url 'website:home' %}#home" data-nav
                class="relative z-10 font-display text-xl font-bold tracking-tight
                       text-slate-900 dark:text-white">
-                {{ site.hero_title|default:"Portfolio"|truncatewords:2 }}<span class="text-accent">.</span>
+                {{ site.brand_name|default:site.hero_title|default:"Portfolio"|truncatewords:2 }}<span class="text-accent">.</span>
             </a>
 
             {# Desktop links — centered #}

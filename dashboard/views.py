@@ -231,13 +231,39 @@ class ExperienceDelete(BaseDeleteView):
 # --------------------------------------------------------------------------- #
 class SkillList(BaseListView):
     model = Skill
+    template_name = "dashboard/skill_list.html"
     page_title = "Skills"
     add_label = "Add skill"
-    columns = [("Name", "name"), ("Category", "get_category_display"),
-               ("Proficiency", "proficiency_percent"), ("Order", "order")]
     add_url = "dashboard:skill_add"
     edit_url = "dashboard:skill_edit"
     delete_url = "dashboard:skill_delete"
+    paginate_by = None  # show every skill, grouped by category
+
+    # Fixed display order for the category groups.
+    CATEGORY_ORDER = [
+        Skill.Category.BACKEND,
+        Skill.Category.FRONTEND,
+        Skill.Category.DATABASE,
+        Skill.Category.DEVOPS,
+        Skill.Category.DESIGN,
+        Skill.Category.OTHER,
+    ]
+
+    def get_queryset(self):
+        return Skill.objects.all().order_by("category", "order", "name")
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        grouped = {}
+        for skill in ctx["object_list"]:
+            grouped.setdefault(skill.category, []).append(skill)
+        ctx["skill_groups"] = [
+            (Skill.Category(cat).label, grouped[cat])
+            for cat in self.CATEGORY_ORDER
+            if cat in grouped
+        ]
+        ctx["total_count"] = len(ctx["object_list"])
+        return ctx
 
 
 class SkillCreate(BaseCreateView):

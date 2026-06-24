@@ -1,5 +1,12 @@
 {# ===== Contact ===== #}
-<section id="contact" data-scroll-section class="py-24 sm:py-32">
+<section id="contact" data-scroll-section class="relative py-24 sm:py-32 overflow-hidden">
+    {# Animated background — grid + floating glows (distinct from the hero) #}
+    <div class="contact-bg -z-10" aria-hidden="true">
+        <div class="contact-bg__grid"></div>
+        <span class="contact-bg__glow contact-bg__glow--1"></span>
+        <span class="contact-bg__glow contact-bg__glow--2"></span>
+    </div>
+
     <div class="max-w-5xl mx-auto px-5 sm:px-8">
         {% include "core/partials/section_heading.html" with heading="Get In Touch" sub="Have a project in mind? Let's talk." %}
 

@@ -1,0 +1,75 @@
+{% extends "dashboard_base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_heading %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between mb-6">
+    <p class="text-sm text-slate-500">{{ total_count }} total</p>
+    {% if add_url %}
+    <a href="{% url add_url %}"
+       class="px-4 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:bg-accent/90">
+        + {{ add_label }}
+    </a>
+    {% endif %}
+</div>
+
+{% if skill_groups %}
+<div class="space-y-8">
+    {% for category, items in skill_groups %}
+    <section>
+        {# Category heading #}
+        <div class="flex items-center gap-3 mb-3">
+            <h2 class="font-semibold text-slate-900 dark:text-white">{{ category }}</h2>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-accent/15 text-accent">{{ items|length }}</span>
+        </div>
+
+        <div class="rounded-2xl bg-white dark:bg-[#0e1428] border border-slate-200 dark:border-white/10 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-slate-50 dark:bg-white/5 text-left text-slate-500">
+                        <tr>
+                            <th class="px-5 py-3 font-medium whitespace-nowrap">Name</th>
+                            <th class="px-5 py-3 font-medium whitespace-nowrap">Proficiency</th>
+                            <th class="px-5 py-3 font-medium whitespace-nowrap">Order</th>
+                            <th class="px-5 py-3 font-medium text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 dark:divide-white/5">
+                        {% for skill in items %}
+                        <tr class="hover:bg-slate-50 dark:hover:bg-white/[0.03]">
+                            <td class="px-5 py-3 text-slate-800 dark:text-slate-200 whitespace-nowrap">
+                                {% if skill.icon %}<i class="{{ skill.icon }} mr-1"></i>{% endif %}{{ skill.name }}
+                            </td>
+                            <td class="px-5 py-3 text-slate-800 dark:text-slate-200 whitespace-nowrap">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-28 h-2 rounded-full bg-slate-200 dark:bg-white/10 overflow-hidden">
+                                        <span class="block h-full rounded-full bg-gradient-to-r from-accent to-accent/70"
+                                              style="width: {{ skill.proficiency_percent }}%"></span>
+                                    </div>
+                                    <span class="text-slate-500">{{ skill.proficiency_percent }}%</span>
+                                </div>
+                            </td>
+                            <td class="px-5 py-3 text-slate-800 dark:text-slate-200 whitespace-nowrap">{{ skill.order|default:"—" }}</td>
+                            <td class="px-5 py-3 text-right whitespace-nowrap">
+                                {% if edit_url %}
+                                <a href="{% url edit_url skill.pk %}" class="text-accent hover:underline">Edit</a>
+                                {% endif %}
+                                {% if delete_url %}
+                                <a href="{% url delete_url skill.pk %}" class="ml-3 text-red-500 hover:underline">Delete</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    {% endfor %}
+</div>
+{% else %}
+<div class="rounded-2xl bg-white dark:bg-[#0e1428] border border-slate-200 dark:border-white/10 px-5 py-10 text-center text-slate-400">
+    Nothing here yet.{% if add_url %} Click “{{ add_label }}” to create one.{% endif %}
+</div>
+{% endif %}
+{% endblock %}

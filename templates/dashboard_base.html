@@ -17,9 +17,35 @@
         };
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/space.css' %}">
+    <style>
+        /* Render native form controls (incl. the <select> dropdown popup) in
+           dark mode so options match the dashboard instead of the OS default. */
+        select { color-scheme: dark; }
+        select option {
+            background-color: #0e1428;  /* dashboard panel color */
+            color: #e2e8f0;             /* slate-200 */
+        }
+        select option:checked,
+        select option:hover {
+            background-color: #6366f1;  /* accent */
+            color: #fff;
+        }
+    </style>
     {% block extra_head %}{% endblock %}
 </head>
 <body class="font-sans bg-slate-100 dark:bg-[#0b1020] text-slate-800 dark:text-slate-200 min-h-screen">
+
+{# Space backdrop (behind everything) #}
+<div class="space-bg" aria-hidden="true">
+    <div class="space-bg__stars"></div>
+    <div class="space-bg__stars space-bg__stars--2"></div>
+    <div class="space-bg__stars space-bg__stars--3"></div>
+    <span class="shooting-star shooting-star--1"></span>
+    <span class="shooting-star shooting-star--2"></span>
+    <span class="shooting-star shooting-star--3"></span>
+    <span class="shooting-star shooting-star--4"></span>
+</div>
 
 {% with path=request.path %}
 <div class="flex min-h-screen">
