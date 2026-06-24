@@ -7,9 +7,16 @@ widget so the custom dashboard forms look cohesive without per-field markup.
 from django import forms
 from django.forms import inlineformset_factory
 
-from blog.models import BlogPost
-from core.models import Experience, Skill, SiteSettings, Testimonial
-from projects.models import Category, Project, ProjectImage, Technology
+from .models import (
+    BlogPost,
+    Category,
+    Experience,
+    Project,
+    ProjectImage,
+    Skill,
+    SiteSettings,
+    Technology,
+)
 
 BASE_INPUT = (
     "w-full rounded-lg border border-slate-300 dark:border-white/10 "
@@ -209,14 +216,6 @@ class BlogPostForm(StyledModelForm):
         self.fields["slug"].required = False
         self.fields["published_at"].required = False
         self.fields["published_at"].input_formats = ["%Y-%m-%dT%H:%M"]
-
-
-class TestimonialForm(StyledModelForm):
-    class Meta:
-        model = Testimonial
-        fields = ["name", "role", "company", "photo", "message", "rating",
-                  "order", "is_active"]
-        widgets = {"message": forms.Textarea(attrs={"rows": 4})}
 
 
 class CategoryForm(StyledModelForm):

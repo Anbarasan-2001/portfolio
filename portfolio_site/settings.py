@@ -59,11 +59,8 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "core",
-    "projects",
-    "blog",
-    "dashboard",
-    "accounts",
+    "dashboard",   # all data models + the management dashboard
+    "website",     # all public-facing UI (pages, auth screens)
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -99,7 +96,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 # Makes SiteSettings available in every template as `site`.
-                "core.context_processors.site_settings",
+                "website.context_processors.site_settings",
             ],
         },
     },
@@ -129,9 +126,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-LOGIN_URL = "accounts:login"
+LOGIN_URL = "website:login"
 LOGIN_REDIRECT_URL = "dashboard:home"
-LOGOUT_REDIRECT_URL = "core:home"
+LOGOUT_REDIRECT_URL = "website:home"
 
 
 # ---------------------------------------------------------------------------

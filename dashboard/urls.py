@@ -43,12 +43,6 @@ urlpatterns = [
     path("blog/<int:pk>/edit/", views.BlogUpdate.as_view(), name="blog_edit"),
     path("blog/<int:pk>/delete/", views.BlogDelete.as_view(), name="blog_delete"),
 
-    # Testimonials
-    path("testimonials/", views.TestimonialList.as_view(), name="testimonial_list"),
-    path("testimonials/add/", views.TestimonialCreate.as_view(), name="testimonial_add"),
-    path("testimonials/<int:pk>/edit/", views.TestimonialUpdate.as_view(), name="testimonial_edit"),
-    path("testimonials/<int:pk>/delete/", views.TestimonialDelete.as_view(), name="testimonial_delete"),
-
     # Messages
     path("messages/", views.MessageList.as_view(), name="messages"),
     path("messages/<int:pk>/toggle/", views.message_toggle_read, name="message_toggle"),

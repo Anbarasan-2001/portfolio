@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth dark">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,8 +24,8 @@
     <meta name="twitter:description" content="{{ site.meta_description }}">
     {% if site.og_image %}<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ site.og_image.url }}">{% endif %}
 
-    {# Inline SVG favicon (accent dot) — no extra request, swap for a real icon later. #}
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='%233b82f6'/></svg>">
+    {# Favicon #}
+    <link rel="icon" type="image/png" href="{% static 'css/image/1.png' %}">
 
     {# Structured data (Person) for richer search results. #}
     <script type="application/ld+json">
@@ -37,21 +37,6 @@
         {% if site.email %}"email": "{{ site.email|escapejs }}",{% endif %}
         "url": "{{ request.scheme }}://{{ request.get_host }}/"
     }
-    </script>
-
-    {# ---- Prevent theme flash: set dark class before paint ---- #}
-    <script>
-        (function () {
-            try {
-                // Dark mode is the default — only light if the user picked it.
-                var t = localStorage.getItem('theme');
-                if (t !== 'light') {
-                    document.documentElement.classList.add('dark');
-                }
-            } catch (e) {
-                document.documentElement.classList.add('dark');
-            }
-        })();
     </script>
 
     {# ---- Tailwind (CDN for now; swappable for a build in production) ---- #}
@@ -132,7 +117,6 @@
     <script src="{% static 'js/scroll.js' %}"></script>
     <script src="{% static 'js/animations.js' %}"></script>
     <script src="{% static 'js/particles.js' %}"></script>
-    <script src="{% static 'js/carousel.js' %}"></script>
     <script src="{% static 'js/form.js' %}"></script>
 
     {% block extra_js %}{% endblock %}

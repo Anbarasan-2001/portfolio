@@ -19,15 +19,17 @@ from django.views.generic import (
     UpdateView,
 )
 
-from blog.models import BlogPost
-from core.models import (
+from .models import (
+    BlogPost,
+    Category,
     ContactMessage,
     Experience,
+    Project,
+    ProjectImage,
     Skill,
     SiteSettings,
-    Testimonial,
+    Technology,
 )
-from projects.models import Category, Project, ProjectImage, Technology
 
 from .forms import (
     BlogPostForm,
@@ -38,7 +40,6 @@ from .forms import (
     SiteSettingsForm,
     SkillForm,
     TechnologyForm,
-    TestimonialForm,
 )
 
 
@@ -46,7 +47,7 @@ from .forms import (
 #  Base mixins
 # --------------------------------------------------------------------------- #
 class DashboardMixin(LoginRequiredMixin):
-    login_url = reverse_lazy("accounts:login")
+    login_url = reverse_lazy("website:login")
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -122,7 +123,6 @@ class DashboardHome(DashboardMixin, TemplateView):
             "unread": ContactMessage.objects.filter(is_read=False).count(),
             "skills": Skill.objects.count(),
             "experiences": Experience.objects.count(),
-            "testimonials": Testimonial.objects.count(),
         }
         ctx["recent_messages"] = ContactMessage.objects.all()[:5]
         ctx["recent_projects"] = Project.objects.all()[:5]
@@ -302,39 +302,6 @@ class BlogDelete(BaseDeleteView):
 
 
 # --------------------------------------------------------------------------- #
-#  Testimonials
-# --------------------------------------------------------------------------- #
-class TestimonialList(BaseListView):
-    model = Testimonial
-    page_title = "Testimonials"
-    add_label = "Add testimonial"
-    columns = [("Name", "name"), ("Company", "company"),
-               ("Rating", "rating"), ("Active", "is_active"), ("Order", "order")]
-    add_url = "dashboard:testimonial_add"
-    edit_url = "dashboard:testimonial_edit"
-    delete_url = "dashboard:testimonial_delete"
-
-
-class TestimonialCreate(BaseCreateView):
-    model = Testimonial
-    form_class = TestimonialForm
-    success_url = reverse_lazy("dashboard:testimonial_list")
-    success_message = "Testimonial created."
-
-
-class TestimonialUpdate(BaseUpdateView):
-    model = Testimonial
-    form_class = TestimonialForm
-    success_url = reverse_lazy("dashboard:testimonial_list")
-    success_message = "Testimonial updated."
-
-
-class TestimonialDelete(BaseDeleteView):
-    model = Testimonial
-    success_url = reverse_lazy("dashboard:testimonial_list")
-
-
-# --------------------------------------------------------------------------- #
 #  Categories & Technologies (project taxonomy)
 # --------------------------------------------------------------------------- #
 class CategoryList(BaseListView):
@@ -421,7 +388,7 @@ class MessageList(BaseListView):
 @require_POST
 def message_toggle_read(request, pk):
     if not request.user.is_authenticated:
-        return redirect("accounts:login")
+        return redirect("website:login")
     msg = get_object_or_404(ContactMessage, pk=pk)
     msg.is_read = not msg.is_read
     msg.save(update_fields=["is_read"])

@@ -1,0 +1,72 @@
+{# Reusable project card. Expects `project` in context. #}
+<article data-project
+         data-category="{{ project.category.slug|default:'' }}"
+         data-tech="{% for t in project.technologies.all %}{{ t.slug }}{% if not forloop.last %},{% endif %}{% endfor %}"
+         class="group relative flex flex-col rounded-3xl overflow-hidden
+                bg-white dark:bg-white/[0.04] backdrop-blur-sm
+                border border-slate-200/70 dark:border-white/10
+                shadow-sm hover:shadow-2xl hover:shadow-accent/10
+                hover:-translate-y-1.5 hover:border-accent/40
+                transition-all duration-300">
+    <a href="{{ project.get_absolute_url }}" class="flex flex-col h-full">
+        {# ---- Cover ---- #}
+        <div class="relative aspect-[16/10] overflow-hidden bg-slate-100 dark:bg-white/5">
+            {% if project.card_image %}
+            <img src="{{ project.card_image.url }}" alt="{{ project.title }}" loading="lazy"
+                 class="w-full h-full object-cover transition-transform duration-500
+                        group-hover:scale-105">
+            {% else %}
+            <div class="w-full h-full flex items-center justify-center
+                        bg-gradient-to-br from-accent/20 to-accent-2/20 text-accent/60">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m4 16 4-4 3 3 4-5 5 6"/>
+                </svg>
+            </div>
+            {% endif %}
+
+            {# Gradient veil so the badge/arrow stay legible on any image #}
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent
+                        opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+            {% if project.is_featured %}
+            <span class="absolute top-3 left-3 inline-flex items-center gap-1 text-xs font-semibold
+                         px-2.5 py-1 rounded-full bg-accent text-white shadow-lg shadow-accent/30">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 2.9 6.3 6.9.6-5.2 4.5 1.6 6.7L12 16.9 5.8 20.6l1.6-6.7L2.2 8.9l6.9-.6L12 2Z"/></svg>
+                Featured
+            </span>
+            {% endif %}
+
+            {# View arrow appears on hover #}
+            <span class="absolute bottom-3 right-3 w-9 h-9 flex items-center justify-center rounded-full
+                         bg-white/90 text-slate-900 shadow-lg translate-y-2 opacity-0
+                         group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7m0 0H8m9 0v9"/>
+                </svg>
+            </span>
+        </div>
+
+        {# ---- Body ---- #}
+        <div class="flex flex-col flex-1 p-5">
+            {% if project.category %}
+            <span class="text-xs font-semibold uppercase tracking-wider text-accent mb-2">
+                {{ project.category.name }}
+            </span>
+            {% endif %}
+            <h3 class="font-display text-lg font-semibold text-slate-900 dark:text-white
+                       group-hover:text-accent transition-colors">
+                {{ project.title }}
+            </h3>
+            <p class="mt-1.5 text-sm text-slate-500 dark:text-slate-400 line-clamp-2">
+                {{ project.short_description }}
+            </p>
+            <div class="mt-auto pt-4 flex flex-wrap gap-1.5">
+                {% for tech in project.technologies.all %}
+                <span class="text-xs px-2 py-0.5 rounded-md bg-slate-100 dark:bg-white/10
+                             text-slate-600 dark:text-slate-300">{{ tech.name }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </a>
+</article>

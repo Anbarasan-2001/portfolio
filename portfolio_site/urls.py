@@ -7,17 +7,14 @@ from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
 from django.views.generic import TemplateView
 
-from core.sitemaps import SITEMAPS
+from website.sitemaps import SITEMAPS
 
 urlpatterns = [
     path("django-admin/", admin.site.urls),  # built-in admin (data entry)
     path("ckeditor5/", include("django_ckeditor_5.urls")),
     # Apps
-    path("", include("core.urls")),
-    path("projects/", include("projects.urls")),
-    path("blog/", include("blog.urls")),
     path("dashboard/", include("dashboard.urls")),
-    path("accounts/", include("accounts.urls")),
+    path("", include("website.urls")),
     # SEO
     path(
         "sitemap.xml",

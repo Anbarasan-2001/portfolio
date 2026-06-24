@@ -1,6 +1,7 @@
 /* =========================================================================
-   theme.js — dark/light theme toggle, mobile menu, and small global helpers.
+   theme.js — mobile menu and small global helpers.
    Loaded first; sets up UI chrome that doesn't depend on GSAP/Locomotive.
+   The site is dark-only; the `dark` class is set on <html> in the template.
    ========================================================================= */
 (function () {
   "use strict";
@@ -11,21 +12,6 @@
   // ----- Footer year -----
   const yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
-
-  // ----- Theme toggle -----
-  const toggle = document.getElementById("theme-toggle");
-  if (toggle) {
-    toggle.addEventListener("click", function () {
-      const isDark = root.classList.toggle("dark");
-      try {
-        localStorage.setItem("theme", isDark ? "dark" : "light");
-      } catch (e) {}
-      // Let other modules react (e.g. recolor canvas particles).
-      document.dispatchEvent(
-        new CustomEvent("themechange", { detail: { dark: isDark } })
-      );
-    });
-  }
 
   // ----- Mobile menu -----
   const navToggle = document.getElementById("nav-toggle");

@@ -1,0 +1,48 @@
+{# ===== Projects ===== #}
+<section id="projects" data-scroll-section class="py-24 sm:py-32">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+        {% include "core/partials/section_heading.html" with heading="Featured Projects" sub="A selection of things I've designed and built." %}
+
+        {% if projects %}
+        {# Filter buttons (JS-driven, no reload) — only useful with categories #}
+        {% if categories %}
+        <div class="flex flex-wrap justify-center gap-2 mb-10" data-anim="fade-up">
+            <button data-filter="all"
+                    class="is-active bg-accent text-white px-4 py-2 rounded-full text-sm font-medium
+                           border border-transparent transition-colors">
+                All
+            </button>
+            {% for category in categories %}
+            <button data-filter="{{ category.slug }}"
+                    class="px-4 py-2 rounded-full text-sm font-medium border border-slate-200
+                           dark:border-white/10 text-slate-600 dark:text-slate-300
+                           hover:border-accent hover:text-accent transition-colors">
+                {{ category.name }}
+            </button>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% comment %}
+        Auto-fit + centered so the layout stays balanced with any number of projects.
+        min(100%, 20rem) keeps a card from ever exceeding the viewport on small phones.
+        {% endcomment %}
+        <div class="grid gap-7 justify-center [grid-template-columns:repeat(auto-fit,minmax(min(100%,20rem),22rem))]"
+             data-stagger>
+            {% for project in projects %}
+                {% include "projects/_card.html" with project=project %}
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-14" data-anim="fade-up">
+            <a href="{% url 'website:project_list' %}"
+               class="inline-flex px-7 py-3 rounded-full border border-slate-300 dark:border-white/20
+                      font-medium hover:border-accent hover:text-accent transition-colors">
+                View All Projects
+            </a>
+        </div>
+        {% else %}
+        <p class="text-center text-slate-400">Add projects from the dashboard to populate this section.</p>
+        {% endif %}
+    </div>
+</section>

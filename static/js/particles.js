@@ -1,6 +1,6 @@
 /* =========================================================================
    particles.js — animated particle network covering the full hero section.
-   Theme-aware, pauses when off-screen / reduced motion, and resizes robustly
+   Pauses when off-screen / reduced motion, and resizes robustly
    (measures its host element, and re-measures on load + resize). No deps.
    ========================================================================= */
 (function () {
@@ -20,9 +20,7 @@
   let w = 0, h = 0, particles = [], raf = null, running = true;
 
   function accentColor() {
-    return document.documentElement.classList.contains("dark")
-      ? "rgba(96, 165, 250, "   /* blue-400 */
-      : "rgba(59, 130, 246, ";  /* blue-500 */
+    return "rgba(96, 165, 250, "; /* blue-400 — site is dark-only */
   }
 
   // Size the canvas to its host element (the full hero), guarding against a

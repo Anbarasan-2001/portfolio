@@ -8,7 +8,6 @@
     {% include "dashboard/_stat_card.html" with label="Projects" value=stats.projects sub=stats.published_projects|stringformat:"s"|add:" published" %}
     {% include "dashboard/_stat_card.html" with label="Blog posts" value=stats.posts %}
     {% include "dashboard/_stat_card.html" with label="Messages" value=stats.messages sub=stats.unread|stringformat:"s"|add:" unread" %}
-    {% include "dashboard/_stat_card.html" with label="Testimonials" value=stats.testimonials %}
     {% include "dashboard/_stat_card.html" with label="Skills" value=stats.skills %}
     {% include "dashboard/_stat_card.html" with label="Experience" value=stats.experiences %}
 </div>
